@@ -17,7 +17,7 @@ function Dashboard() {
     return (
         <div>
             <button onClick = {refreshGallery}>Refresh Galley</button>
-            <h1>This is da dashboard!</h1>
+            <h1>Dashboard:</h1>
             {images.map(e => {
                 return (
                     <img src={e}></img>

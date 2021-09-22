@@ -22,7 +22,7 @@ function Upload() {
 
     const [profile, setProfile] = useState(
         {
-            name : null
+            name : " "
         }
     );
 
@@ -81,6 +81,7 @@ function Upload() {
                 onLogoutSuccess={responseGoogleLogOut}
                 onFailure={responseGoogleLogOut}
             />
+            <p>{profile.name}</p>
             <h1>Upload your image:</h1>
             <input type = "file" onChange = {onFileChange} />
             <button onClick = {onFileUpload}>Upload!</button>
