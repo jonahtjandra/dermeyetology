@@ -1,31 +1,20 @@
 import axios from 'axios';
 import React,{useState} from 'react';
-import {GoogleLogin, GoogleLogout} from 'react-google-login';
+import {Link, Redirect} from "react-router-dom";
+import {GoogleLogout} from 'react-google-login';
+import store from './redux/store.js'
 
 function Upload() {
-
-    //Response after logged in
-    const responseGoogleLogIn = (response) => {
-        console.log(response.profileObj);
-        setProfile(response.profileObj);
-    }
-
-    //Response after logged out
-    const responseGoogleLogOut = (response) => {
-        console.log(response);
-        setProfile(
-            {
-                name : null
-            }
-        )
-    }
-
     const [profile, setProfile] = useState(
         {
             name : " "
         }
     );
-
+    //Response after logged out
+    const responseGoogleLogOut = (response) => {
+        store.dispatch({ type: 'logIn/logout', payload: {id:0, secret:0} })
+        setProfile({name: " "})
+    }
     const [state, setState] = useState({
         selectedFile : null
     })
@@ -33,6 +22,8 @@ function Upload() {
     // Update the state
         setState({ selectedFile: event.target.files[0] });
     };
+
+    console.log(store.getState().secret)
 
     const [msg, setMsg] = useState("");
 
@@ -46,46 +37,48 @@ function Upload() {
         }
         // Create an object of formData
         const formData = new FormData();
-        
-        // Update the formData object
+
         formData.append(
             "myImage",
             state.selectedFile,
             state.selectedFile.name
         );
-        
-        // Details of the uploaded file
+
         console.log(state.selectedFile);
+
+        var header = {
+            id: store.getState().id
+        }
         
         // Request made to the backend api
         // Send formData object
-        axios.post("http://127.0.0.1:5000/upload-image", formData).then((response) => {
+        axios.post("http://127.0.0.1:5000/upload-image", formData, {
+            headers: header
+          }).then((response) => {
             setMsg("Upload succeeded");
             setFileName(": " + state.selectedFile.name);
         }, (error) => {
             console.log(error);
         });
     }; 
+    if (store.getState().value === false) {
+        console.log("logout");
+        return <Redirect to="/"/>
+    }
     return(
         <div>
-            <GoogleLogin
-                clientId="241925853564-8cdksrgjfum3hila55sb29jm6dnhn121.apps.googleusercontent.com"
-                buttonText="Login with Google"
-                onSuccess={responseGoogleLogIn}
-                onFailure={responseGoogleLogIn}
-                cookiePolicy={'single_host_origin'}
-            />
             <GoogleLogout
                 clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
                 buttonText="Logout of Google"
                 onLogoutSuccess={responseGoogleLogOut}
                 onFailure={responseGoogleLogOut}
             />
-            <p>{profile.name}</p>
+            {/* <p>{profile.name}</p> */}
             <h1>Upload your image:</h1>
             <input type = "file" onChange = {onFileChange} />
             <button onClick = {onFileUpload}>Upload!</button>
             <p>{msg} {fileName}</p>
+            <Link to="/dashboard">Dashboard</Link>
         </div>
     )
 }
