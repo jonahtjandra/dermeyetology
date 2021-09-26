@@ -1,2 +1,7 @@
+numpy==1.18.5
+tensorflow_macos==0.1a3
 Flask==2.0.1
 Flask_Cors==3.0.10
+mysql_connector_repackaged==0.3.1
+Pillow==8.3.2
+tensorflow==2.6.0

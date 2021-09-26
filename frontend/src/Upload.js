@@ -3,6 +3,12 @@ import React,{useState} from 'react';
 import {Link, Redirect} from "react-router-dom";
 import {GoogleLogout} from 'react-google-login';
 import store from './redux/store.js'
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+
+const Input = styled('input')({
+    display: 'none',
+});
 
 function Upload() {
     const [profile, setProfile] = useState(
@@ -75,10 +81,10 @@ function Upload() {
             />
             {/* <p>{profile.name}</p> */}
             <h1>Upload your image:</h1>
-            <input type = "file" onChange = {onFileChange} />
-            <button onClick = {onFileUpload}>Upload!</button>
+            <input accept="image/*" id="contained-button-file" multiple type="file" onChange = {onFileChange}/>
+            <Button onClick = {onFileUpload} variant="contained" >Upload!</Button>
             <p>{msg} {fileName}</p>
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/dashboard" style = {{textDecoration : "none"}}><Button variant="contained">Dashboard</Button></Link>
         </div>
     )
 }
