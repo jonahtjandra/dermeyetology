@@ -3,7 +3,6 @@ import sys
 from numpy import Infinity
 import tensorflow as tf
 from tensorflow import keras
-from PIL import Image
 import base64, datetime
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
